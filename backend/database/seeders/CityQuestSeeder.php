@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Hash;
 class CityQuestSeeder extends Seeder
 {
     /**
-     * Seed realistic Chisinau data for local development.
+     * Seed idempotent CityQuest product data and non-production demo accounts.
      */
     public function run(): void
     {
@@ -36,13 +36,16 @@ class CityQuestSeeder extends Seeder
         );
 
         $categories = $this->seedCategories();
-        $users = $this->seedUsers($city);
+        $users = app()->environment(['local', 'testing']) ? $this->seedUsers($city) : [];
         $places = $this->seedPlaces($city, $categories);
         $this->seedImportedPlaces($city, $categories);
         $routes = $this->seedRoutes($city, $users, $places);
         $achievements = $this->seedAchievements();
 
-        $this->seedUserState($users, $places, $routes, $achievements);
+        if ($users !== []) {
+            $this->seedUserState($users, $places, $routes, $achievements);
+        }
+
         $this->refreshPlaceLocations();
     }
 
@@ -1393,7 +1396,7 @@ class CityQuestSeeder extends Seeder
             $routes[$item['slug']] = CityRoute::query()->updateOrCreate(
                 ['slug' => $item['slug']],
                 [
-                    'user_id' => $users[$item['author']]->id,
+                    'user_id' => $users[$item['author']]->id ?? null,
                     'city_id' => $city->id,
                     'title' => $item['title'],
                     'description' => $item['description'],

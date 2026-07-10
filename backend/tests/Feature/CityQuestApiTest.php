@@ -16,6 +16,57 @@ class CityQuestApiTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_production_seed_keeps_product_data_without_demo_accounts(): void
+    {
+        $this->app->detectEnvironment(fn () => 'production');
+
+        $this->artisan('db:seed', [
+            '--class' => CityQuestSeeder::class,
+            '--force' => true,
+        ])->assertSuccessful();
+
+        $this->assertDatabaseHas('cities', ['slug' => 'chisinau']);
+        $this->assertDatabaseHas('routes', ['is_public' => true, 'user_id' => null]);
+        $this->assertDatabaseMissing('users', ['email' => 'alexander@cityquest.test']);
+    }
+
+    public function test_unauthenticated_api_requests_never_redirect_to_a_web_login_route(): void
+    {
+        $this->get('/api/me')
+            ->assertUnauthorized()
+            ->assertJsonStructure(['message']);
+    }
+
+    public function test_cors_allows_the_configured_frontend_origin(): void
+    {
+        config([
+            'cors.allowed_origins' => ['https://cityquest-web.vercel.app'],
+            'cors.allowed_origins_patterns' => [],
+        ]);
+
+        $this->withHeader('Origin', 'https://cityquest-web.vercel.app')
+            ->getJson('/api/health')
+            ->assertOk()
+            ->assertHeader('Access-Control-Allow-Origin', 'https://cityquest-web.vercel.app');
+    }
+
+    public function test_cors_rejects_an_untrusted_origin(): void
+    {
+        config([
+            'cors.allowed_origins' => ['https://cityquest-web.vercel.app'],
+            'cors.allowed_origins_patterns' => [],
+        ]);
+
+        $response = $this->withHeader('Origin', 'https://untrusted.example')
+            ->getJson('/api/health')
+            ->assertOk();
+
+        $allowOrigin = $response->headers->get('Access-Control-Allow-Origin');
+
+        $this->assertNotSame('*', $allowOrigin);
+        $this->assertNotSame('https://untrusted.example', $allowOrigin);
+    }
+
     public function test_public_endpoints_return_seeded_cityquest_data(): void
     {
         $this->seed(CityQuestSeeder::class);

@@ -1,5 +1,18 @@
 # Runtime and build artifacts
 output/
+graphify-out/
+_cityquest_audit_for_chatgpt/
+cityquest_audit_for_chatgpt.zip
+PROGRESS.md
+.prompts/
+*.zip
+*.dump
+*.sql
+*.sql.gz
+*.sqlite
+*.sqlite3
+*.bak
+*.trace
 
 # Frontend
 frontend/node_modules/
@@ -8,6 +21,12 @@ frontend/out/
 frontend/*.tsbuildinfo
 frontend/.env*
 !frontend/.env.example
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+frontend/coverage/
+frontend/.vercel/
+frontend/*.log
 
 # Backend
 backend/vendor/
@@ -18,9 +37,12 @@ backend/.env.*
 backend/storage/*.key
 backend/storage/logs/*.log
 backend/bootstrap/cache/*.php
+backend/.phpunit.result.cache
+backend/.phpunit.cache/
 
 # OS and editor
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+*.log

@@ -1,7 +1,7 @@
 import { getStoredAuthToken } from "@/lib/api/auth-token";
 import type { ApiErrorPayload } from "@/lib/api/types";
 
-const DEFAULT_API_URL = "http://localhost:8000/api";
+const DEVELOPMENT_API_URL = "http://localhost:8000/api";
 
 export type ApiQuery = object;
 
@@ -30,7 +30,17 @@ export class ApiError extends Error {
 }
 
 export function apiBaseUrl(): string {
-  return (process.env.NEXT_PUBLIC_API_URL ?? DEFAULT_API_URL).replace(/\/+$/, "");
+  const configuredUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+
+  if (configuredUrl) {
+    return configuredUrl.replace(/\/+$/, "");
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("NEXT_PUBLIC_API_URL is required in production.");
+  }
+
+  return DEVELOPMENT_API_URL;
 }
 
 export async function apiFetch<T>(
