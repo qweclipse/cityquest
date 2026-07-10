@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Warm history fallback">
+  <rect width="1200" height="800" fill="#eadfcd"/>
+  <path d="M600 120 L690 300 L890 330 L745 465 L780 665 L600 570 L420 665 L455 465 L310 330 L510 300 Z" fill="#9a6a43" opacity=".82"/>
+  <circle cx="600" cy="410" r="150" fill="#fff7ed" opacity=".75"/>
+  <path d="M495 415 h210 M600 310 v210" stroke="#7a6a46" stroke-width="28" stroke-linecap="round"/>
+  <path d="M180 690 h840" stroke="#2a211b" stroke-width="38" stroke-linecap="round" opacity=".16"/>
+</svg>

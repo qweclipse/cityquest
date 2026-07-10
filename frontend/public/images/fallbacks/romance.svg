@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Warm evening fallback">
+  <rect width="1200" height="800" fill="#17130f"/>
+  <circle cx="880" cy="165" r="115" fill="#d59a6a" opacity=".86"/>
+  <path d="M0 520 C250 440 420 530 620 455 C800 390 1020 455 1200 350 L1200 800 L0 800 Z" fill="#2e261e"/>
+  <path d="M185 675 C360 560 520 700 700 585 C850 488 990 575 1110 485" fill="none" stroke="#f5eadc" stroke-width="28" opacity=".5" stroke-linecap="round"/>
+  <g fill="#d59a6a">
+    <rect x="250" y="365" width="24" height="210" rx="12"/>
+    <circle cx="262" cy="335" r="34"/>
+    <rect x="930" y="330" width="24" height="240" rx="12"/>
+    <circle cx="942" cy="298" r="34"/>
+  </g>
+</svg>

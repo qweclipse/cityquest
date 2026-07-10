@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Warm culture fallback">
+  <rect width="1200" height="800" fill="#241d17"/>
+  <circle cx="245" cy="160" r="110" fill="#d59a6a" opacity=".75"/>
+  <circle cx="970" cy="250" r="150" fill="#b97954" opacity=".42"/>
+  <path d="M220 590 C360 410 515 360 605 490 C700 625 825 570 980 405" fill="none" stroke="#f5eadc" stroke-width="46" stroke-linecap="round" opacity=".72"/>
+  <path d="M225 620 H970" stroke="#d59a6a" stroke-width="44" stroke-linecap="round"/>
+  <path d="M380 320 h440 v88 H380 Z" fill="#403727" stroke="#d59a6a" stroke-width="18"/>
+  <circle cx="470" cy="365" r="28" fill="#f5eadc"/>
+  <circle cx="600" cy="365" r="28" fill="#f5eadc"/>
+  <circle cx="730" cy="365" r="28" fill="#f5eadc"/>
+</svg>

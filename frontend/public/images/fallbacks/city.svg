@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Warm city street fallback">
+  <rect width="1200" height="800" fill="#eadfcd"/>
+  <path d="M0 540 C260 485 430 530 650 475 C830 430 1000 455 1200 390 L1200 800 L0 800 Z" fill="#d8c8a8"/>
+  <g fill="#9a6a43">
+    <rect x="80" y="250" width="180" height="330" rx="14"/>
+    <rect x="330" y="180" width="210" height="390" rx="14"/>
+    <rect x="650" y="230" width="170" height="330" rx="14"/>
+    <rect x="900" y="145" width="220" height="430" rx="14"/>
+  </g>
+  <g fill="#fff7ed" opacity=".82">
+    <rect x="120" y="300" width="48" height="60" rx="8"/>
+    <rect x="190" y="300" width="48" height="60" rx="8"/>
+    <rect x="380" y="240" width="54" height="66" rx="8"/>
+    <rect x="465" y="240" width="54" height="66" rx="8"/>
+    <rect x="700" y="285" width="48" height="60" rx="8"/>
+    <rect x="950" y="210" width="54" height="70" rx="8"/>
+    <rect x="1035" y="210" width="54" height="70" rx="8"/>
+  </g>
+  <path d="M0 710 C320 640 610 725 1200 610 L1200 800 L0 800 Z" fill="#2a211b" opacity=".16"/>
+</svg>

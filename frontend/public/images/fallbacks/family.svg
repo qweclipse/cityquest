@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Warm family fallback">
+  <rect width="1200" height="800" fill="#f3eadc"/>
+  <path d="M0 610 C250 555 420 635 640 560 C820 500 980 555 1200 490 L1200 800 L0 800 Z" fill="#d8c8a8"/>
+  <circle cx="440" cy="320" r="78" fill="#9a6a43"/>
+  <circle cx="610" cy="285" r="92" fill="#7a7d3c"/>
+  <circle cx="780" cy="335" r="66" fill="#e6b08b"/>
+  <path d="M320 600 C350 470 510 430 610 510 C700 430 865 475 900 610 Z" fill="#fff7ed" stroke="#9a6a43" stroke-width="18"/>
+  <path d="M520 570 C570 610 660 610 710 570" fill="none" stroke="#9a6a43" stroke-width="18" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Warm cafe fallback">
+  <rect width="1200" height="800" fill="#fff7ed"/>
+  <circle cx="910" cy="175" r="135" fill="#e6b08b" opacity=".5"/>
+  <path d="M285 290 h430 a95 95 0 0 1 0 190 h-36 a170 170 0 0 1-330 0 h-64 z" fill="#9a6a43"/>
+  <path d="M720 335 h48 a48 48 0 0 1 0 96 h-48" fill="none" stroke="#9a6a43" stroke-width="42" stroke-linecap="round"/>
+  <path d="M315 590 h440" stroke="#2a211b" stroke-width="34" stroke-linecap="round" opacity=".22"/>
+  <path d="M410 190 C350 145 470 100 410 60 M540 190 C480 145 600 100 540 60 M670 190 C610 145 730 100 670 60" fill="none" stroke="#7a6a46" stroke-width="20" stroke-linecap="round" opacity=".55"/>
+</svg>
