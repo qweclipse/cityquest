@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import maplibregl, {
+import * as maplibregl from "maplibre-gl";
+import {
   type LngLatLike,
   type Map as MaplibreMap,
   type Marker,

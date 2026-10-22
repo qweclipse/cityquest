@@ -13,18 +13,29 @@ class Place extends Model
     use HasFactory;
 
     public const STATUS_VERIFIED = 'verified';
+
     public const STATUS_COMMUNITY_CONFIRMED = 'community_confirmed';
+
     public const STATUS_USER_ADDED = 'user_added';
+
     public const STATUS_NEEDS_REVIEW = 'needs_review';
+
     public const STATUS_NEEDS_LOCATION_REVIEW = 'needs_location_review';
+
     public const STATUS_NEEDS_IMAGE_REVIEW = 'needs_image_review';
+
     public const STATUS_NEEDS_SOURCE_REVIEW = 'needs_source_review';
+
     public const STATUS_REJECTED = 'rejected';
+
     public const STATUS_CLOSED = 'closed';
 
     public const SOURCE_MANUAL = 'manual';
+
     public const SOURCE_OFFICIAL = 'official';
+
     public const SOURCE_COMMUNITY = 'community';
+
     public const SOURCE_IMPORTED = 'imported';
 
     public const TRUSTED_STATUSES = [
@@ -133,5 +144,10 @@ class Place extends Model
     public function isTrustedForRoutes(): bool
     {
         return $this->is_active && in_array($this->verification_status, self::TRUSTED_STATUSES, true);
+    }
+
+    public function isVisibleTo(?User $user): bool
+    {
+        return $this->is_active || ($user && ($user->id === $this->created_by_user_id || $user->canModerate()));
     }
 }

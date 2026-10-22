@@ -16,6 +16,79 @@ class CityQuestApiTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_inactive_places_are_visible_only_to_their_creator_and_moderators(): void
+    {
+        $this->seed(CityQuestSeeder::class);
+        $owner = User::factory()->create();
+        $stranger = User::factory()->create();
+        $moderator = User::factory()->create(['role' => User::ROLE_MODERATOR]);
+        $place = Place::query()->firstOrFail();
+        $place->update([
+            'created_by_user_id' => $owner->id,
+            'is_active' => false,
+            'verification_status' => Place::STATUS_NEEDS_REVIEW,
+        ]);
+
+        $this->getJson('/api/places/'.$place->id)->assertNotFound();
+
+        Sanctum::actingAs($stranger);
+        $this->getJson('/api/places/'.$place->id)->assertNotFound();
+        $this->postJson('/api/places/'.$place->id.'/favorite')->assertNotFound();
+        $this->deleteJson('/api/places/'.$place->id.'/favorite')->assertNotFound();
+        $this->postJson('/api/places/'.$place->id.'/suggest-correction', [
+            'payload' => ['note' => 'Hidden place', 'reason' => 'status_issue'],
+        ])->assertNotFound();
+        $this->assertDatabaseMissing('favorite_places', ['place_id' => $place->id, 'user_id' => $stranger->id]);
+        $this->assertDatabaseMissing('place_correction_suggestions', ['place_id' => $place->id, 'user_id' => $stranger->id]);
+
+        Sanctum::actingAs($owner);
+        $this->getJson('/api/places/'.$place->id)->assertOk();
+        $place->update(['verification_status' => Place::STATUS_REJECTED]);
+        $this->getJson('/api/places/'.$place->id)->assertOk();
+
+        Sanctum::actingAs($moderator);
+        $this->getJson('/api/places/'.$place->id)->assertOk();
+    }
+
+    public function test_untrusted_forwarded_addresses_cannot_bypass_login_rate_limits(): void
+    {
+        for ($attempt = 1; $attempt <= 9; $attempt++) {
+            $this->withHeader('X-Forwarded-For', '198.51.100.'.$attempt)
+                ->postJson('/api/login', [
+                    'email' => 'probe@cityquest.test',
+                    'password' => 'invalid',
+                ])->assertStatus($attempt <= 8 ? 422 : 429);
+        }
+    }
+
+    public function test_deactivated_places_do_not_leak_through_routes_or_old_favorites(): void
+    {
+        $this->seed(CityQuestSeeder::class);
+        $route = CityRoute::query()->where('is_public', true)->firstOrFail();
+        $place = $route->points()->firstOrFail()->place;
+        $user = User::factory()->create();
+        $user->favoritePlaces()->attach($place->id);
+        $pointCount = $route->points()->count();
+        $place->update(['is_active' => false, 'verification_status' => Place::STATUS_REJECTED]);
+
+        $response = $this->getJson('/api/routes/'.$route->id)
+            ->assertOk()
+            ->assertJsonCount($pointCount - 1, 'data.points')
+            ->assertJsonCount($pointCount - 1, 'data.line')
+            ->assertJsonMissing(['name' => $place->name]);
+        $this->assertNotContains(
+            ['lat' => (float) $place->lat, 'lng' => (float) $place->lng],
+            $response->json('data.line'),
+        );
+        $this->getJson('/api/routes/public')->assertOk()->assertJsonMissing(['name' => $place->name]);
+        $this->getJson('/api/collections')->assertOk()->assertJsonMissing(['name' => $place->name]);
+
+        $this->withToken($user->createToken('visibility-test')->plainTextToken)
+            ->getJson('/api/profile')
+            ->assertOk()
+            ->assertJsonCount(0, 'data.favorite_places');
+    }
+
     public function test_production_seed_keeps_product_data_without_demo_accounts(): void
     {
         $this->app->detectEnvironment(fn () => 'production');

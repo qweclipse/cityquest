@@ -25,7 +25,8 @@ class UserResource extends JsonResource
             'preferred_city' => new CityResource($this->whenLoaded('preferredCity')),
             'achievements' => AchievementResource::collection($this->whenLoaded('achievements')),
             'saved_routes' => RouteResource::collection($this->whenLoaded('savedRoutes')),
-            'favorite_places' => PlaceResource::collection($this->whenLoaded('favoritePlaces')),
+            'favorite_places' => PlaceResource::collection($this->whenLoaded('favoritePlaces', fn () => $this->favoritePlaces->filter(fn ($place) => $place->isVisibleTo($request->user('sanctum')))->values()
+            )),
             'stats' => $this->when($this->profileStatsAvailable(), fn () => [
                 'achievements_count' => (int) ($this->achievements_count ?? $this->loadedCount('achievements')),
                 'completed_routes_count' => (int) ($this->completed_routes_count ?? 0),

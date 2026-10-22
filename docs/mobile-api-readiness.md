@@ -16,14 +16,14 @@ Public endpoints cover health, cities, categories, places, map data, public rout
 
 ## CORS and transport
 
-- CORS allows the exact production frontend origin, an anchored CityQuest Vercel preview pattern, and local development origins.
+- CORS allows exact configured frontend origins and local development origins; no broad preview-origin pattern is enabled by default.
 - `supports_credentials` is disabled because authentication uses bearer tokens.
-- HTTPS is required for hosted frontend/API traffic. Supabase credentials remain server-only.
+- HTTPS is required for hosted frontend/API traffic. Database credentials remain server-only.
 - Mobile apps are not governed by browser CORS, but they use the same HTTPS JSON contract and authorization checks.
 
 ## Compatibility guardrails
 
 - Keep response resources and endpoint paths backward compatible; add fields rather than renaming/removing them without API versioning.
 - Preserve Laravel validation and role middleware as the trust boundary.
-- Do not embed Supabase service-role/database credentials in Next.js or mobile binaries.
+- Do not embed database credentials in Next.js or mobile binaries.
 - If cookie-based web auth is introduced later, review CSRF, credentialed CORS, cookie domain/SameSite, and Sanctum stateful domains separately. That redesign is not part of the first deployment.

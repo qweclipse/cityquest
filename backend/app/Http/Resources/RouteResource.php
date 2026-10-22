@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 class RouteResource extends JsonResource
 {
@@ -12,6 +13,10 @@ class RouteResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $points = $this->resource->relationLoaded('points')
+            ? $this->points->filter(fn ($point) => $point->place?->isVisibleTo($request->user('sanctum')))->values()
+            : collect();
+
         return [
             'id' => $this->id,
             'city' => new CityResource($this->whenLoaded('city')),
@@ -38,8 +43,8 @@ class RouteResource extends JsonResource
             'saves_count' => (int) $this->saves_count,
             'image_url' => $this->image_url,
             'created_source' => $this->created_source,
-            'points' => RoutePointResource::collection($this->whenLoaded('points')),
-            'line' => $this->whenLoaded('points', fn () => $this->lineCoordinates()),
+            'points' => RoutePointResource::collection($this->whenLoaded('points', fn () => $points)),
+            'line' => $this->whenLoaded('points', fn () => $this->lineCoordinates($points)),
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];
@@ -48,9 +53,9 @@ class RouteResource extends JsonResource
     /**
      * @return array<int, array{lat: float, lng: float}>
      */
-    private function lineCoordinates(): array
+    private function lineCoordinates(Collection $points): array
     {
-        return $this->points
+        return $points
             ->filter(fn ($point) => $point->relationLoaded('place') && $point->place !== null)
             ->map(fn ($point) => [
                 'lat' => (float) $point->place->lat,

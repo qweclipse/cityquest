@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import maplibregl, { type LngLatLike, type Map as MaplibreMap } from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
+import { type LngLatLike, type Map as MaplibreMap } from "maplibre-gl";
 import { MapPin } from "lucide-react";
 
 import type { Place } from "@/lib/api/types";

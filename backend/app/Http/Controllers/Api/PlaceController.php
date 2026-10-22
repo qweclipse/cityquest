@@ -110,8 +110,10 @@ class PlaceController extends Controller
         ]);
     }
 
-    public function show(Place $place): PlaceResource
+    public function show(Request $request, Place $place): PlaceResource
     {
+        $this->ensureVisible($request, $place);
+
         return new PlaceResource(
             $place->load(['city', 'category', 'creator', 'photos']),
         );
@@ -159,6 +161,8 @@ class PlaceController extends Controller
 
     public function suggestCorrection(Request $request, Place $place): JsonResponse
     {
+        $this->ensureVisible($request, $place);
+
         $data = $request->validate([
             'payload' => ['required', 'array'],
             'payload.address' => ['nullable', 'string', 'max:255'],
@@ -200,6 +204,8 @@ class PlaceController extends Controller
 
     public function favorite(Request $request, Place $place): PlaceResource
     {
+        $this->ensureVisible($request, $place);
+
         $request->user()->favoritePlaces()->syncWithoutDetaching([$place->id]);
 
         return new PlaceResource($place->load(['city', 'category']));
@@ -207,9 +213,16 @@ class PlaceController extends Controller
 
     public function unfavorite(Request $request, Place $place): PlaceResource
     {
+        $this->ensureVisible($request, $place);
+
         $request->user()->favoritePlaces()->detach($place->id);
 
         return new PlaceResource($place->load(['city', 'category']));
+    }
+
+    private function ensureVisible(Request $request, Place $place): void
+    {
+        abort_unless($place->isVisibleTo($request->user('sanctum')), 404);
     }
 
     private function mapBaseQuery(?int $cityId): Builder
@@ -220,7 +233,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     private function initialModerationStatus(array $data): string
     {
@@ -240,7 +253,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     private function coordinatesLookReviewable(array $data): bool
     {
@@ -251,7 +264,7 @@ class PlaceController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     private function hasAnySourceLink(array $data): bool
     {

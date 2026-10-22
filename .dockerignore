@@ -1,5 +1,10 @@
 .git
 .gitignore
+.agents
+.codex
+.promts
+.env
+.env.*
 .prompts
 _cityquest_audit_for_chatgpt
 cityquest_audit_for_chatgpt.zip

@@ -167,6 +167,7 @@ test.describe("public beta smoke", () => {
     await expect(progressAction).toBeDisabled();
 
     await page.goto("/profile");
+    await page.getByRole("tab", { name: "Городской журнал" }).click();
     await expect(page.locator("main")).toContainText(route.title);
 
     await page.goto("/history");
